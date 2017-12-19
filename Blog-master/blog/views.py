@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
+from django.contrib.auth.models import User
 
 
 # List of posts on homepage
@@ -92,3 +93,23 @@ def approve_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     comment.approve()
     return redirect('post_detail', post_id=comment.post.pk)
+
+def signup(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        email = request.POST['email']
+        pw = request.POST['pw']
+        rpw = request.POST['rpw']
+
+        if pw == rpw:
+            print(username)
+            try:
+                user = User.objects.get(username = username)
+            except User.DoesNotExist:
+                user = User.objects.create_user(username=username, email=email, password=pw)
+                user.save()
+                return redirect('/')
+
+        return render(request, 'registration/signup.html', {})
+    else:
+        return render(request, 'registration/signup.html', {})

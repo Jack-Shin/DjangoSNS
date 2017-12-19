@@ -1,0 +1,25 @@
+
+
+{% extends "blog/base.html" %}
+
+{% block content %}
+  <nav class="breadcrumb">
+    <a class="breadcrumb-item" href="/">Home</a>
+    <span class="breadcrumb-item active">Log in</span>
+  </nav>
+
+  <!-- Login form -->
+  <div class="login-box">
+    <h1>Sign up</h1>
+    <br>
+    <form class="form-signin" action="{% url 'signup' %}" method="POST">
+			{% csrf_token %}
+			Username : <input type="text" class="form-control" name="username">
+			Email : <input type="text" class="form-control" name="email">
+			Password : <input type="password" class="form-control" name="pw">
+			Re-Password : <input type="password" class="form-control" name="rpw">
+			<input class="btn btn-primary btn-submit" type="submit" value="Sign up">
+		</form>
+  </div>
+  <!-- /Login form -->
+{% endblock %}
