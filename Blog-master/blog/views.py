@@ -21,7 +21,12 @@ def post_draft_list(request):
 # Detailed page for a post
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    return render(request, 'blog/post_detail.html', {'post': post})
+
+    isAuthor = False
+    if post.author == request.user:
+        isAuthor = True
+
+    return render(request, 'blog/post_detail.html', {'post': post, 'isAuthor' : isAuthor})
 
 # Form to add a new post
 @login_required
@@ -41,15 +46,20 @@ def post_new(request):
 @login_required
 def post_edit(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect('post_detail', post_id=post.pk)
+
+    if request.user != post.author:
+        return redirect('post_list')
     else:
-        form = PostForm(instance=post)
+        if request.method == 'POST':
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.save()
+                return redirect('post_detail', post_id=post.pk)
+        else:
+            form = PostForm(instance=post)
+    
     return render(request, 'blog/post_edit.html', {'form': form})
 
 # Publish a post
@@ -63,7 +73,8 @@ def post_publish(request, post_id):
 @login_required
 def post_remove(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    post.delete()
+    if post.author == request.user:
+        post.delete()
     return redirect('post_list')
 
 # Form to add a comment to a post

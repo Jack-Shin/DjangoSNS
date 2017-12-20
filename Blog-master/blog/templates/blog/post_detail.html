@@ -10,14 +10,17 @@
   <div class="post">
     {% if user.is_authenticated %}
       <!-- Post controls -->
-      <a class="post-action centre" href="{% url 'post_edit' post_id=post.pk %}">
-        <i class="material-icons">edit</i>
-        Edit
-      </a>
-      <a class="post-action centre" href="{% url 'post_remove' post_id=post.pk %}">
-        <i class="material-icons">clear</i>
-        Remove
-      </a>
+      
+      {% if isAuthor == True %}
+        <a class="post-action centre" href="{% url 'post_edit' post_id=post.pk %}">
+          <i class="material-icons">edit</i>
+          Edit
+        </a>
+        <a class="post-action centre" href="{% url 'post_remove' post_id=post.pk %}">
+          <i class="material-icons">clear</i>
+          Remove
+        </a>
+      {% endif %}
       {% if not post.published_date %}
         <a class="post-action centre" href="{% url 'post_publish' post_id=post.pk %}">
           <i class="material-icons">done</i>
