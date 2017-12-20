@@ -9,7 +9,7 @@
   <!-- Post -->
   <div class="post">
     {% if user.is_authenticated %}
-      <!-- Post controls -->
+      <!-- Post controls --> 
       
       {% if isAuthor == True %}
         <a class="post-action centre" href="{% url 'post_edit' post_id=post.pk %}">
