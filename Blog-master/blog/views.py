@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from .models import Post, Comment
+from .models import Post, Comment, Heart
 from .forms import PostForm, CommentForm
 from django.contrib.auth.models import User
 
@@ -104,6 +104,30 @@ def approve_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     comment.approve()
     return redirect('post_detail', post_id=comment.post.pk)
+
+
+def heart_post(request, post_id):
+    if request.user.is_authenticated():
+        username = request.user
+        try:
+            heart = Heart.objects.get(post_id = post_id, lover = username)
+            heart.delete()
+        except Heart.DoesNotExist:
+            post = get_object_or_404(Post, pk = post_id)
+            heart = Heart(lover = username, post = post)
+            heart.save()
+
+    n = getCountHeart()
+    return render(request, 'blog/heart_post.html', { 'n' : n })
+
+def nheart_post(request, post_id):
+    n = getCountHeart()
+    return render(request, 'blog/heart_post.html', { 'n' : n })
+
+
+def getCountHeart():
+    n = Heart.objects.count()
+    return n
 
 def signup(request):
     if request.method == "POST":

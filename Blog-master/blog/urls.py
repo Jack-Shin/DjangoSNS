@@ -15,6 +15,9 @@ urlpatterns = [
 
     url(r'^post/(?P<post_id>\d+)/comment/$', views.add_comment, name='add_comment'),
 
+    url(r'^post/(?P<post_id>\d+)/heart/$', views.heart_post, name='heart_post'),
+    url(r'^post/(?P<post_id>\d+)/nheart/$', views.nheart_post, name='nheart_post'),
+
     url(r'^comment/(?P<comment_id>\d+)/remove/$', views.remove_comment, name='remove_comment'),
     url(r'^comment/(?P<comment_id>\d+)/approve/$', views.approve_comment, name='approve_comment'),
 

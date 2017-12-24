@@ -28,6 +28,9 @@
         </a>
       {% endif %}
       <!-- /Post controls -->
+      
+      <a href="{% url 'heart_post' post_id=post.pk %}">fhgfh</a>
+
     {% endif %}
     <h1>{{ post.title }}</h1>
     <br>
@@ -47,8 +50,28 @@
       <i class="material-icons">person</i>
       {{ post.author }}
     </p>
+    <span id='nheart'></span>
+    <span id='hbutt'>♡</span>
   </div>
   <!-- /Post -->
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script>
+    $.ajax({
+      url : "{% url 'nheart_post' post_id=post.pk %}",
+      success:function(data) {
+        $('#nheart').text(data)
+      }
+    })
+
+    $('#hbutt').click(function() {
+      $.ajax({
+        url : "{% url 'heart_post' post_id=post.pk %}",
+        success:function(data) {
+          $('#nheart').text(data)
+        }
+      })
+    })
+  </script>
 
   {% if post.published_date %}
     <!-- Comments -->
