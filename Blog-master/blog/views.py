@@ -117,16 +117,17 @@ def heart_post(request, post_id):
             heart = Heart(lover = username, post = post)
             heart.save()
 
-    n = getCountHeart()
+    n = getCountHeart(post_id)
     return render(request, 'blog/heart_post.html', { 'n' : n })
 
 def nheart_post(request, post_id):
-    n = getCountHeart()
+    n = getCountHeart(post_id)
     return render(request, 'blog/heart_post.html', { 'n' : n })
 
 
-def getCountHeart():
-    n = Heart.objects.count()
+def getCountHeart(post_id):
+    p = get_object_or_404(Post, pk=post_id)
+    n = Heart.objects.filter(post=p).count()
     return n
 
 def signup(request):
