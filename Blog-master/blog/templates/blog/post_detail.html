@@ -20,13 +20,15 @@
           <i class="material-icons">clear</i>
           Remove
         </a>
+        {% if not post.published_date %}
+          <a class="post-action centre" href="{% url 'post_publish' post_id=post.pk %}">
+            <i class="material-icons">done</i>
+            Publish
+          </a>
+        {% endif %}
+        
       {% endif %}
-      {% if not post.published_date %}
-        <a class="post-action centre" href="{% url 'post_publish' post_id=post.pk %}">
-          <i class="material-icons">done</i>
-          Publish
-        </a>
-      {% endif %}
+      
       <!-- /Post controls -->
 
     {% endif %}

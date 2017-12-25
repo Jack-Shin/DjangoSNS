@@ -1,7 +1,6 @@
 from django import forms
 from .models import Post, Comment, Heart
 
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -10,9 +9,9 @@ class PostForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('author', 'text',)
+        fields = ('text',)
 
-class Heart(forms.ModelForm):
+'''class Heart(forms.ModelForm):
 		class Meta:
 				model = Heart
-				fields = ('lover',)
+				fields = ('lover',)'''

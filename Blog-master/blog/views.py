@@ -15,7 +15,7 @@ def post_list(request):
 # List of unpublished posts (drafts)
 @login_required
 def post_draft_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
+    posts = Post.objects.filter(published_date__isnull=True, author=request.user).order_by('created_date')
     return render(request, 'blog/post_draft_list.html', {'posts': posts})
 
 # Detailed page for a post
@@ -66,7 +66,8 @@ def post_edit(request, post_id):
 @login_required
 def post_publish(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    post.publish()
+    if post.author == request.user:
+        post.publish()
     return redirect('post_detail', post_id=post_id)
 
 # Remove a post
@@ -85,6 +86,7 @@ def add_comment(request, post_id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
+            comment.author = request.user
             comment.save()
             return redirect('post_detail', post_id=post.pk)
     else:
