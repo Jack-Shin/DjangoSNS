@@ -79,6 +79,7 @@ def post_remove(request, post_id):
     return redirect('post_list')
 
 # Form to add a comment to a post
+@login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.method == "POST":
@@ -97,16 +98,17 @@ def add_comment(request, post_id):
 @login_required
 def remove_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
-    comment.delete()
+    if comment.author == request.user:
+        comment.delete()
     return redirect('post_detail', post_id=comment.post.pk)
 
 # Approve a comment
 @login_required
 def approve_comment(request, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
-    comment.approve()
+    if comment.author == request.user:
+        comment.approve()
     return redirect('post_detail', post_id=comment.post.pk)
-
 
 def heart_post(request, post_id):
     if request.user.is_authenticated():
@@ -118,9 +120,10 @@ def heart_post(request, post_id):
             post = get_object_or_404(Post, pk = post_id)
             heart = Heart(lover = username, post = post)
             heart.save()
-
+            
     n = getCountHeart(post_id)
     return render(request, 'blog/heart_post.html', { 'n' : n })
+    
 
 def nheart_post(request, post_id):
     n = getCountHeart(post_id)
